@@ -14,20 +14,23 @@
         <div class="container-fluid">
           <a href="/" class="navbar-brand">Superlists</a>
           {% if user.email %}
-            <ul class="nav navbar-text navbar-right">
-              <li class="navbar-text">Logged in as {{ user.email }}</li>
-              <li><a href="{% url 'logout' %}">Log out</a></li>
-            </ul>
+          <ul class="nav navbar-nav navbar-left">
+            <li><a href="{% url 'my_lists' user.email %}">My lists</a></li>
+          </ul>
+          <ul class="nav navbar-text navbar-right">
+            <li class="navbar-text">Logged in as {{ user.email }}</li>
+            <li><a href="{% url 'logout' %}">Log out</a></li>
+          </ul>
           {% else %}
-            <form
-              method="POST"
-              action="{% url 'send_login_email' %}"
-              class="navbar-form navbar-right"
-            >
-              <span>Enter email to log in:</span>
-              <input name="email" type="text" class="form-control" />
-              {% csrf_token %}
-            </form>
+          <form
+            method="POST"
+            action="{% url 'send_login_email' %}"
+            class="navbar-form navbar-right"
+          >
+            <span>Enter email to log in:</span>
+            <input name="email" type="text" class="form-control" />
+            {% csrf_token %}
+          </form>
           {% endif %}
         </div>
       </nav>
@@ -46,21 +49,29 @@
         <div class="col-md-6 col-md-offset-3 jumbotron">
           <div class="text-center">
             <h1>{% block header_text %}{% endblock %}</h1>
-            <form method="POST" action="{% block form_action %}{% endblock %}">
-              {{ form.text }} {% csrf_token %} {% if form.errors %}
-              <div class="form-group has-error">
-                <span class="help-block">
-                  {{ form.text.errors }}
-                </span>
-              </div>
-              {% endif %}
-            </form>
+            {% block list_form %}
+              <form method="POST" action="{% block form_action %}{% endblock %}">
+                {{ form.text }} {% csrf_token %} {% if form.errors %}
+                <div class="form-group has-error">
+                  <span class="help-block">
+                    {{ form.text.errors }}
+                  </span>
+                </div>
+                {% endif %}
+              </form>
+            {% endblock %}
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6 col-md-offset-3">
           {% block table %} {% endblock %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          {% block extra_content %}
+          {% endblock %}
         </div>
       </div>
     </div>

@@ -157,3 +157,9 @@ class ListViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'list.html')
         self.assertContains(response, escape(EMPTY_ITEM_ERROR))
+
+
+class MylistsTest(TestCase):
+    def test_my_lists_url_renders_my_lists_template(self):
+        response = self.client.get('/lists/users/a@b.com/')
+        self.assertTemplateUsed(response, 'my_lists.html')
